@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="55cd05d2-b0c7-42e3-b4c0-cb883730242a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<api-gateway:autodiscovery apiId="16176111" doc:name="API Autodiscovery" doc:id="0cbf336e-818d-4874-9c0d-73767734c1f0" flowRef="sample-helloworldFlow" />
+	<flow name="sample-helloworldFlow" doc:id="06f4cde3-da82-4f35-aa1c-664c1e8eae45" >
+		<http:listener doc:name="Listener" doc:id="ec5a3365-bce8-4eaf-8d05-69fefe58c02c" config-ref="HTTP_Listener_config" path="/helloworld"/>
+		<set-payload value='#["Hello world"]' doc:name="Set Payload" doc:id="d0d2507c-cf1b-42ff-9f0a-2e21d985a1a9" />
+		<ee:transform doc:name="Transform Message" doc:id="63668fd6-4e21-4914-90a0-f77f194cae38" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
